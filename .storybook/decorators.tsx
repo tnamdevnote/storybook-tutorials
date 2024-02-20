@@ -1,7 +1,7 @@
 
 import { ThemeProvider } from 'styled-components';
 // This should be "Decorator" in Version 7.0 and up.
-import { DecoratorFn } from '@storybook/react'
+import { Decorator } from '@storybook/react'
 import { GlobalStyle } from '../src/styles/GlobalStyle'
 import { lightTheme, darkTheme } from '../src/styles/theme'
 import { BrowserRouter } from 'react-router-dom'
@@ -10,11 +10,11 @@ import React from 'react'
 
 // initialize()
 
-const withRouter: DecoratorFn = (StoryFn) => {
+const withRouter: Decorator = (StoryFn) => {
   return <BrowserRouter><StoryFn /></BrowserRouter>
 }
 
-const withTheme: DecoratorFn = (StoryFn, context) => {
+const withTheme: Decorator = (StoryFn, context) => {
   const theme = context.parameters.theme || context.globals.theme;
   const storyTheme = theme === 'dark' ? darkTheme : lightTheme;
 return (
