@@ -2,6 +2,9 @@
 import { ThemeProvider } from 'styled-components';
 import { Decorator } from '@storybook/react'
 import { GlobalStyle } from '../src/styles/GlobalStyle'
+import { Provider as StoreProvider } from 'react-redux'
+import { configureStore } from '@reduxjs/toolkit'
+import { rootReducer } from '../src/app-state'
 import { lightTheme, darkTheme } from '../src/styles/theme'
 import { BrowserRouter } from 'react-router-dom'
 import React from 'react'
@@ -20,7 +23,20 @@ return (
   </ThemeProvider>
 )}
 
+const withStore: Decorator = (StoryFn, { parameters }) => {
+  const store = configureStore({
+    reducer: rootReducer,
+    preloadedState: parameters.store?.initialState
+  })
+  return (
+    <StoreProvider store={store}>
+      <StoryFn />
+    </StoreProvider>
+  )
+}
+
 export const globalDecorators = [
   withTheme,
-  withRouter
+  withRouter,
+  withStore
 ]
