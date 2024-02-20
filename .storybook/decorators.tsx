@@ -4,8 +4,11 @@ import { ThemeProvider } from 'styled-components';
 import { DecoratorFn } from '@storybook/react'
 import { GlobalStyle } from '../src/styles/GlobalStyle'
 import { lightTheme, darkTheme } from '../src/styles/theme'
-import { BrowserRouter, BrowserRouter as Router } from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
+import { initialize, mswLoader, mswDecorator } from 'msw-storybook-addon'
 import React from 'react'
+
+// initialize()
 
 const withRouter: DecoratorFn = (StoryFn) => {
   return <BrowserRouter><StoryFn /></BrowserRouter>
