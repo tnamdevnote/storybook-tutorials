@@ -1,6 +1,8 @@
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport'
 import { globalDecorators } from './decorators';
 import { viewports as breakpoints } from '../src/styles/breakpoints'
+import { initialize, mswLoader } from 'msw-storybook-addon';
+import { Preview } from '@storybook/react';
 
 // Create custom viewports using widths defined in design tokens
 const breakpointViewports = Object.keys(breakpoints).reduce((acc, key) => {
@@ -16,25 +18,37 @@ const breakpointViewports = Object.keys(breakpoints).reduce((acc, key) => {
   return acc
 }, {} as typeof INITIAL_VIEWPORTS)
 
-export const parameters = {
-  actions: { argTypesRegex: '^on[A-Z].*' },
-  viewport: {
-    viewports: {
-      ...breakpointViewports,
-      ...INITIAL_VIEWPORTS,
+/**
+ * https://github.com/mswjs/msw-storybook-addon/issues/121
+ * https://github.com/storybookjs/storybook/discussions/25049
+ * use MSW addon beta version for now.
+ * yarn add msw-storybook-addon@2.0.0--canary.122.b3ed3b1.0 -D
+ */
+initialize()
+
+const preview: Preview = {
+  parameters: {
+    actions: { argTypesRegex: "^on[A-Z].*" },
+    viewport: {
+      viewports: {
+        ...breakpointViewports,
+        ...INITIAL_VIEWPORTS,
+      },
     },
-  },
-  controls: {
-    matchers: {
-      color: /(background|color)$/i,
-      date: /Date$/,
+    controls: {
+      matchers: {
+        color: /(background|color)$/i,
+        date: /Date$/,
+      },
     },
+    loaders: [mswLoader]
   },
-}
+};
+
+export default preview;
 
 export const decorators = globalDecorators;
 
-// import { Preview } from '@storybook/your-framework';
 export const globalTypes = {
   theme: {
     description: 'Global theme for components',
