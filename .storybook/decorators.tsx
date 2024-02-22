@@ -6,11 +6,23 @@ import { Provider as StoreProvider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
 import { rootReducer } from '../src/app-state'
 import { lightTheme, darkTheme } from '../src/styles/theme'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom'
 import React from 'react'
 
-const withRouter: Decorator = (StoryFn) => {
-  return <BrowserRouter><StoryFn /></BrowserRouter>
+const withRouter: Decorator = (StoryFn, { parameters: { deeplink }}) => {
+
+  if(!deeplink) {
+    return <BrowserRouter><StoryFn /></BrowserRouter>
+  }
+
+  const { path, route } = deeplink
+  return (
+    <MemoryRouter initialEntries={[encodeURI(route)]}>
+      <Routes>
+        <Route path={path} element={<StoryFn />} />
+      </Routes>
+    </MemoryRouter>
+  )
 }
 
 const withTheme: Decorator = (StoryFn, context) => {

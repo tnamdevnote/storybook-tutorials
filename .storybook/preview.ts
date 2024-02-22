@@ -41,10 +41,10 @@ const preview: Preview = {
         date: /Date$/,
       },
     },
-    loaders: [mswLoader]
   },
 };
 
+export const loaders = [mswLoader]
 export default preview;
 
 export const decorators = globalDecorators;
