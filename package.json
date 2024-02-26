@@ -31,7 +31,7 @@
     "lint": "eslint --fix .",
     "prettier": "prettier --write .",
     "pre-commit": "lint-staged",
-    "chromatic": "chromatic --exit-zero-on-changes"
+    "chromatic": "chromatic"
   },
   "eslintConfig": {
     "extends": "react-app"
