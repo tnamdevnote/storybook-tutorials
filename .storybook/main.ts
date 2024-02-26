@@ -10,7 +10,9 @@ module.exports = {
     '@storybook/addon-essentials',
     '@storybook/preset-create-react-app',
     '@storybook/addon-designs',
-    '@storybook/addon-mdx-gfm'
+    '@storybook/addon-mdx-gfm',
+    '@storybook/addon-interactions',
+    '@storybook/addon-a11y'
   ],
 
   framework: {

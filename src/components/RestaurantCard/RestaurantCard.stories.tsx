@@ -1,5 +1,7 @@
+import { expect } from '@storybook/jest'
 import { Meta, StoryObj } from '@storybook/react'
 import { restaurants } from 'stub/restaurants'
+import { within, userEvent } from '@storybook/testing-library'
 
 import { RestaurantCard } from './RestaurantCard'
 
@@ -27,6 +29,11 @@ export const Default: Story = {
       url: 'https://www.figma.com/file/3Q1HTCalD0lJnNvcMoEw1x/Mealdrop?type=design&node-id=1126-3893&mode=design&t=AzNw8j8pcggpr2zA-4',
     },
   },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement)
+    await userEvent.click(canvas.getByTestId('restaurant-card'))
+    await expect(args.onClick).toHaveBeenCalled()
+  },
 }
 
 export const New: Story = {
@@ -38,6 +45,11 @@ export const New: Story = {
 export const Closed: Story = {
   args: {
     isClosed: true,
+  },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement)
+    await userEvent.click(canvas.getByTestId('restaurant-card'))
+    await expect(args.onClick).not.toHaveBeenCalled()
   },
 }
 

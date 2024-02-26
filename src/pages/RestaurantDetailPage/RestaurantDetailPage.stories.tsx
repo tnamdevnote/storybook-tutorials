@@ -3,6 +3,8 @@ import { cartItems as items } from 'stub/cart-items'
 import { BASE_URL } from 'api'
 import { delay, http, HttpResponse } from 'msw'
 import { restaurants } from 'stub/restaurants'
+import { userEvent, within } from '@storybook/testing-library'
+import { expect } from '@storybook/jest'
 
 import { RestaurantDetailPage } from './RestaurantDetailPage'
 
@@ -15,20 +17,19 @@ const meta: Meta<typeof RestaurantDetailPage> = {
       path: '/restaurants/:id',
       route: '/restaurants/1',
     },
-    msw: {
-      handlers: [
-        http.get(BASE_URL, () => {
-          HttpResponse.json(restaurants[0])
-        }),
-      ],
-    },
   },
+  render: () => (
+    <>
+      <RestaurantDetailPage />
+      <div id="modal"></div>
+    </>
+  ),
 }
 
 export default meta
 type Story = StoryObj<typeof RestaurantDetailPage>
 
-export const Succes: Story = {
+export const Success: Story = {
   parameters: {
     design: {
       type: 'figma',
@@ -42,12 +43,18 @@ export const Succes: Story = {
       ],
     },
   },
-  render: () => (
-    <>
-      <RestaurantDetailPage />
-      <div id="modal"></div>
-    </>
-  ),
+}
+
+export const WithModal: Story = {
+  parameters: {
+    ...Success.parameters,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const foodItem = await canvas.findByText(/Cheeseburger/i)
+    await userEvent.click(foodItem)
+    await expect(canvas.getByTestId('modal')).toBeInTheDocument()
+  },
 }
 
 export const SuccessWithItemsInTheCart: Story = {
@@ -89,9 +96,6 @@ export const NotFound: Story = {
     },
     msw: {
       handlers: [
-        // http.get(BASE_URL, () => {
-        //   return new HttpResponse.json(null, { status: 404 })
-        // }),
         http.get(BASE_URL, () => {
           return new HttpResponse(null, {
             status: 404,
